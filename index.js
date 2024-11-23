@@ -1,4 +1,20 @@
-function maxDaysInMonth(month, year) {
+function isValidDate(dateStr) {
+    const regex = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (!regex.test(dateStr)) {
+      return false;
+    }
+  
+    const [day, month, year] = dateStr.split('/').map(Number);
+  
+    if (month < 1 || month > 12 || year < 1000 || year > 9999) {
+      return false;
+    }
+  
+    const maxDays = maxDaysInMonth(month, year);
+    return day >= 1 && day <= maxDays;
+  }
+  
+  function maxDaysInMonth(month, year) {
     const monthsWith30Days = [4, 6, 9, 11];
     const monthsWith31Days = [1, 3, 5, 7, 8, 10, 12];
   
@@ -16,27 +32,20 @@ function maxDaysInMonth(month, year) {
     return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
   }
   
-  function isValidDate(dateStr) {
-    const regex = /^\d{2}\/\d{2}\/\d{4}$/;
-    if (!regex.test(dateStr)) {
-      return false;
+  function isPalindrome(dateStr) {
+    if (!isValidDate(dateStr)) {
+      return false; // Si la date est invalide, retourner false
     }
   
-    const [day, month, year] = dateStr.split('/').map(Number);
-  
-    if (month < 1 || month > 12 || year < 1000 || year > 9999) {
-      return false;
-    }
-  
-    const maxDays = maxDaysInMonth(month, year);
-    return day >= 1 && day <= maxDays;
+    const cleanedDate = dateStr.replace(/\//g, ""); // Supprime les '/'
+    const reversedDate = cleanedDate.split("").reverse().join(""); // Inverse les caractères
+    return cleanedDate === reversedDate; // Compare la date originale avec sa version inversée
   }
   
-  console.log(isValidDate("03/04/2001")); // true
-  console.log(isValidDate("03/14/2001")); // false
-  console.log(isValidDate("31/11/2001")); // false
-  console.log(isValidDate("29/02/2020")); // true
-  console.log(isValidDate("29/02/2021")); // false
-  console.log(isValidDate("01/01/999"));  // false
-  console.log(isValidDate("32/01/2000")); // false
+  // Tests
+  console.log(isPalindrome("11/02/2011")); // true (Palindrome)
+  console.log(isPalindrome("12/02/2021")); // false (Non palindrome)
+  console.log(isPalindrome("02/02/2020")); // true (Palindrome)
+  console.log(isPalindrome("31/11/2001")); // false (Date invalide)
+  console.log(isPalindrome("29/02/2020")); // false (Non palindrome)
   
